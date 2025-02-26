@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { dummyCourses } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import humanizeDuration from 'humanize-duration';
 
 export const AppContext = createContext();
 
@@ -36,9 +37,79 @@ export const AppContextProvider = ({children}) => {
         return totalRating / course.courseRatings.length;
     };
 
-    useEffect(() => fetchAllCourses(), []);
+    //Function to Calculate Course Chepter Time
+    // const calculateChepterTime = (chepter) => {
+    //     let time = 0;
+    //     chepter.chepterContent.map((lecture) => time+= lecture.lectureDuration);
+    //     return humanizeDuration(time*60*1000, { units: ['h', 'm']});
+    // }
+    const calculateChepterTime = (chapter) => {
+        let time = 0;
+        if (chapter.chapterContent && Array.isArray(chapter.chapterContent)) {
+            chapter.chapterContent.forEach((lecture) => {
+                time += lecture.lectureDuration;
+            });
+        }
+        return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
+    };
 
-    const value = { currency, allCourses, navigate, calculateRating, isEducator, setIsEducator,  };
+    //Function to Calculate Course Duration
+    // const calculateCourseDuration = (course) => {
+    //     let time = 0;
+
+    //     course.courseContent.map((chepter) => chepter.chepterContent.map(
+    //         (lecture) => time+= lecture.lectureDuration
+    //     ));
+
+    //     return humanizeDuration(time*60*1000, { units: ['h', 'm']});
+    // }
+    const calculateCourseDuration = (course) => {
+        let time = 0;
+        if (course.courseContent && Array.isArray(course.courseContent)) {
+            course.courseContent.forEach((chapter) => {
+                if (chapter.chapterContent && Array.isArray(chapter.chapterContent)) {
+                    chapter.chapterContent.forEach((lecture) => {
+                        time += lecture.lectureDuration;
+                    });
+                }
+            });
+        }
+        return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] });
+    };
+
+    // Function calculate to No of Lectures in the course
+    // const calculateNoOfLectures = (course) => {
+    //     let totalLectures = 0;
+
+    //     course.courseContent.map((chepter) => {
+    //         if (Array.isArray(chepter.chepterContent)) {
+    //             totalLectures += chepter.chepterContent.length;
+    //         }
+    //     });
+
+    //     return totalLectures;
+    // }
+    const calculateNoOfLectures = (course) => {
+        let totalLectures = 0;
+        if (course.courseContent && Array.isArray(course.courseContent)) {
+            course.courseContent.forEach((chapter) => {
+                if (chapter.chapterContent && Array.isArray(chapter.chapterContent)) {
+                    totalLectures += chapter.chapterContent.length;
+                }
+            });
+        }
+        return totalLectures;
+    };
+
+    // useEffect(() => fetchAllCourses(), []);
+    useEffect(() => {
+        async function fetchData() {
+            await fetchAllCourses();
+        }
+        fetchData();
+    }, []);
+
+    const value = { currency, allCourses, navigate, calculateRating, isEducator, setIsEducator, calculateChepterTime, calculateCourseDuration, calculateNoOfLectures };
 
     return (
         <AppContext.Provider value={value}>
