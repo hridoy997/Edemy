@@ -1,15 +1,25 @@
 @import "tailwindcss";
 
+* {
+    font-family: 'Outfit';
+}
+
 /* @theme {
     --font-size-course-details-heading-small: ['26px', '36px'];
     --font-size-course-details-heading-large: ['36px', '44px'];
     --font-size-home-heading-small: ['28px', '34px'];
     --font-size-home-heading-large: ['48px', '56px'];
-
 } */
 
-* {
-    font-family: 'Outfit';
+@layer utilities {
+
+    .max-w-course-card {
+        max-width: 424px;
+    }
+    .shadow-custom-card {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
 }
 
 @layer base {
