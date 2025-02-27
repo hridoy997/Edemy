@@ -146,7 +146,7 @@ const CourseDetails = () => {
                             </div>
                         </div>
 
-                        <button className="text-white font-medium w-full py-3 mt-4 md:mt-6 rounded bg-blue-600">{isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}</button>
+                        <button className="text-white font-medium w-full py-3 mt-4 md:mt-6 rounded bg-blue-600 cursor-pointer">{isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}</button>
 
                         <div className="pt-6">
                             <p className="text-lg md:text-xl font-medium text-gray-800">What’s in the course?</p>
